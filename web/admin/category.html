@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base href="/products60/"/>
+<title>Insert title here</title>
+	<link rel="stylesheet" type="text/css" href="easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
+	<script type="text/javascript" src="easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+	
+	<script type="text/javascript">
+		$(function(){
+			$('#dg').datagrid({    
+			    url:'admin/adminCategoryServlet?method=findAll',  // 访问后台数据的请求路径 
+			    columns:[[    
+			        {field:'cid',title:'分类编号',width:200},    
+			        {field:'cname',title:'分类名称',width:100},
+			        //添加一个列
+			        {field:'xxx',title:'操作', width:80,
+						formatter: function(value,row,index){
+							return "<a href=javascript:edit('"+row.cid+"')>编辑</a> | <a href=javascript:del('"+row.cid+"')>删除</a>";
+						}
+					}
+
+			    ]],
+			    //在表格顶部添加工具条
+			    toolbar: [{
+					iconCls: 'icon-add',
+					handler: function(){
+						//打开添加分类的窗口
+						$('#win').window('open');  // open a window    
+					}
+				}]
+
+			});  
+
+			//得到按钮，并绑定事件
+			$("#btn").click(function(){
+			
+				//提交表单数据
+				$('#ff').form({    
+				    url:'admin/adminCategoryServlet?method=addCategory', //提交路径    
+				   /*  onSubmit: function(){    
+				        var value = $("input[type='text']").val();  
+				        //alert(value);
+				        if(value==""){
+				        	alert("分类名称不能为空！");
+				        	return false;
+				        } 
+				    },     */
+				    success:function(data){   //{"msg":"添加成功"} 
+				      	var json = eval("("+data+")");   // var str = eval("2+3");
+				      	//提示信息
+				      	$.messager.show({
+							title:'我的消息',
+							msg:json.msg+',消息将在3秒后关闭。',
+							timeout:3000,
+							showType:'slide'
+						});
+
+				      	//关闭窗口
+				      	$('#win').window('close');  // close a window  
+				      	//刷新表格
+				      	$('#dg').datagrid('reload');    // 重新载入当前页面数据 
+				    }    
+				});    
+				// submit the form    
+				$('#ff').submit();  
+			});
+			
+			//得到修改按钮，并绑定事件
+			$("#btnUpdate").click(function(){
+				$('#ffEdit').form('submit', {    
+				    url:'admin/adminCategoryServlet?method=update',    
+				    success:function(data){    
+				    	var json = eval("("+data+")");   // var str = eval("2+3");
+				      	//提示信息
+				      	$.messager.show({
+							title:'我的消息',
+							msg:json.msg+',消息将在3秒后关闭。',
+							timeout:3000,
+							showType:'slide'
+						});
+
+				      	//关闭窗口
+				      	$('#winEdit').window('close');  // close a window  
+				      	//刷新表格
+				      	$('#dg').datagrid('reload');    // 重新载入当前页面数据 
+				    }    
+				});  
+
+			});
+			
+		});
+		
+		function del(cid){
+			if(confirm("是否确认要删除？")){
+				var url = "admin/adminCategoryServlet";
+				var param = {"method":"delCategory","cid":cid};
+				$.post(url,param,function(data){
+					//提示信息
+			      	$.messager.show({
+						title:'我的消息',
+						msg:data.msg+',消息将在3秒后关闭。',
+						timeout:3000,
+						showType:'slide'
+					});
+			      	//刷新表格
+			      	$('#dg').datagrid('reload');    // 重新载入当前页面数据 
+				},"json");
+			}
+		}
+		
+		function edit(cid){
+			$('#ffEdit').form('load','admin/adminCategoryServlet?method=findById&cid='+cid);	// 读取表单的URL
+			$('#winEdit').window('open');  // open a window 
+		}
+		
+	</script>
+</head>
+<body>
+	<table id="dg"></table>  
+	<!-- 添加分类窗口 -->
+	<div id="win" class="easyui-window" title="添加分类" style="width:400px;height:100px"   
+        data-options="iconCls:'icon-save',modal:true,closed:true">   
+	   <form id="ff" method="post">
+	   		所有分类：<input type="text" name="cname"/>
+	   		<input type="button" id="btn" value="添加"/>
+	   </form>    
+	</div>  
+	<!-- 编辑分类窗口 -->
+	<div id="winEdit" class="easyui-window" title="修改分类" style="width:400px;height:100px"   
+        data-options="iconCls:'icon-save',modal:true,closed:true">   
+	   <form id="ffEdit" method="post">
+	   	<input type="hidden" name="cid"/>
+	   		所有分类：<input type="text" name="cname"/>
+	   		<input type="button" id="btnUpdate" value="修改"/>
+	   </form>    
+	</div>  
+	
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base href="/products60/"/>
+<title>Insert title here</title>
+	<link rel="stylesheet" type="text/css" href="easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
+	<script type="text/javascript" src="easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+	
+	<script type="text/javascript">
+		$(function(){
+				//得到按钮，并绑定事件
+				$("#btn").click(function(){
+					var flag = $('#tt').tabs('exists','所有分类');
+					if(!flag){
+						//得到选项卡组件容器，并添加新选项卡
+						$('#tt').tabs('add',{    
+						    title:'所有分类',    
+						    content:'所有分类。。。',    
+						    closable:true   
+						    
+						}); 
+					}else{
+						//选中指定的选项卡
+						$('#tt').tabs('select','所有分类');
+					}
+				});
+			
+		});
+	</script>
+</head>
+<body>
+	<div id="tt" class="easyui-tabs" style="width:500px;height:250px;">   
+	    <div title="Tab1" style="padding:20px;display:none;">   
+	        tab1    
+	    </div>   
+	  
+	</div>  
+	
+	<input type="button" value="添加" id="btn"/>
+</body>
+</html>

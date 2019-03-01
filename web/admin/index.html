@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<base href="/products60/"/>
+<title>Insert title here</title>
+	<link rel="stylesheet" type="text/css" href="easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
+	<script type="text/javascript" src="easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+	
+	<style type="text/css">
+		#aa a{
+			text-decoration:none;
+		}
+	</style>
+	
+	<script type="text/javascript">
+		$(function(){
+			//得到a标签，并绑定事件
+			$("#aa a").click(function(){
+				var content = $(this).html();//var content = this.innerHTML;
+				var url = this.href;//得到url路径
+				//判断指定选项卡是否存在
+			    var flag  =  $('#tt').tabs('exists',content);
+ 
+				if(!flag){
+					//添加选项卡
+					$('#tt').tabs('add',{    
+					    title:content,    
+					    content:showContent(url),   //选项卡内容 
+					    closable:true  
+					});  
+				}else{
+					//选中选项卡
+					$('#tt').tabs('select',content);
+				}
+				
+				return false; //阻止页面路径
+				
+			});
+			
+		});
+		
+		function showContent(url){
+			return "<iframe src='"+url+"' style='width:100%;height:100%' frameborder='0'></iframe>";
+		}
+	</script>
+</head>
+<body>
+<div id="cc" class="easyui-layout" style="width:600px;height:400px;" data-options="fit:true"> 
+	<!-- 北部 -->  
+    <div data-options="region:'north',split:true" style="height:80px;background-image:url(admin/images/top_100.jpg)"></div>   
+    <!-- 西部 -->
+    <div data-options="region:'west',split:true" style="width:200px;">
+    	<div id="aa" class="easyui-accordion" style="width:300px;height:200px;" data-options="fit:true">   
+		    <div title="分类管理"  style="overflow:auto;padding:10px;">   
+		    	<a href="admin/category.html">所有分类</a> 
+		    </div>   
+		    <div title="商品管理"  style="padding:10px;">   
+		       <a href="admin/product.html">所有商品</a>    
+		    </div>   
+		    <div title="订单管理">   
+		        content3    
+		    </div>   
+		    <div title="用户管理">   
+		        content3    
+		    </div>   
+		</div>  
+    </div>   
+    <!-- 中部 -->
+    <div data-options="region:'center'" style="padding:0px;background:#eee;">
+    	<div id="tt" class="easyui-tabs" style="width:500px;height:250px;" data-options="fit:true">   
+		    <div title="首页" style="padding:20px;display:none;">   
+		        欢迎来到后台管理页面！ 
+		    </div>   
+		   
+		</div>  
+    </div>   
+</div>  
+	
+</body>
+</html>
